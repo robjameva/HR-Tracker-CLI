@@ -42,10 +42,7 @@ VALUES
   ('Hyacintha', 'Bascombe', 11, NULL),
   ('Candra', 'Dymidowicz', 11, NULL),
   ('Sherm', 'Kulis', 11, NULL),
-  ('Edlin', 'Chester', 11, NULL);
-
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES
+  ('Edlin', 'Chester', 11, NULL),
   ('Ronnica', 'McLaughlan', 2, 10),
   ('Tonia', 'Kelcher', 9, 10),
   ('Jackson', 'Cordier', 1, 14),
