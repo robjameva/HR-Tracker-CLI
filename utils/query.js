@@ -2,7 +2,7 @@ const db = require('../db/connection')
 const cTable = require('console.table');
 
 const getEmployees = () => {
-    const sql = `SELECT e.id, e.first_name, e.last_name, roles.title, departments.name AS department, roles.salary, m.first_name AS Manager
+    const sql = `SELECT e.id, e.first_name, e.last_name, roles.title, departments.name AS department, CONCAT('$', FORMAT(roles.salary, 0)) AS 'salary', m.first_name AS Manager
                  FROM employees e
                  LEFT JOIN employees m ON e.manager_id = m.id
                  LEFT JOIN roles ON e.role_id = roles.id
@@ -14,8 +14,36 @@ const getEmployees = () => {
     });
 }
 
+const getEmployeesByManager = () => {
+    const sql = `SELECT m.first_name AS Manager, e.id, e.first_name, e.last_name, roles.title, departments.name AS department, CONCAT('$', FORMAT(roles.salary, 0)) AS 'salary'
+                 FROM employees e
+                 LEFT JOIN employees m ON e.manager_id = m.id
+                 LEFT JOIN roles ON e.role_id = roles.id
+                 LEFT JOIN departments ON roles.department_id = departments.id
+                 ORDER BY m.first_name`;
+
+    db.query(sql, (err, rows) => {
+        if (err) console.log({ error: err.message });
+        console.table(rows);
+    });
+}
+
+const getEmployeesByDepartment = () => {
+    const sql = `SELECT departments.name AS department, e.id, e.first_name, e.last_name, roles.title, CONCAT('$', FORMAT(roles.salary, 0)) AS 'salary', m.first_name AS Manager
+                 FROM employees e
+                 LEFT JOIN employees m ON e.manager_id = m.id
+                 LEFT JOIN roles ON e.role_id = roles.id
+                 LEFT JOIN departments ON roles.department_id = departments.id
+                 ORDER BY departments.name`;
+
+    db.query(sql, (err, rows) => {
+        if (err) console.log({ error: err.message });
+        console.table(rows);
+    });
+}
+
 const getRoles = () => {
-    const sql = `SELECT roles.id, title, salary, departments.name AS department
+    const sql = `SELECT roles.id, title, CONCAT('$', FORMAT(salary, 0)) AS 'salary', departments.name AS department
                  FROM roles
                  LEFT JOIN departments ON roles.department_id = departments.id`;
 
@@ -28,6 +56,19 @@ const getRoles = () => {
 const getDepartments = () => {
     const sql = `SELECT id, name AS department
                  FROM departments`;
+
+    db.query(sql, (err, rows) => {
+        if (err) console.log({ error: err.message });
+        console.table(rows);
+    });
+}
+
+const getBudgetUtilization = () => {
+    const sql = `SELECT departments.name AS department, CONCAT('$', FORMAT(SUM(roles.salary), 0)) AS 'budget used'
+                 FROM employees 
+                 LEFT JOIN roles ON role_id = roles.id
+                 LEFT JOIN departments ON roles.department_id = departments.id
+                 GROUP BY departments.name`;
 
     db.query(sql, (err, rows) => {
         if (err) console.log({ error: err.message });
@@ -65,23 +106,68 @@ const insertEmployee = (firstName, lastName, role, manager) => {
     });
 }
 
-const updateEmployee = (role, employeeId) => {
+const updateEmployeeRole = (roleId, employeeId) => {
     const sql = `UPDATE employees
                  SET role_id = ?
                  WHERE id = ?`;
 
-    db.query(sql, [role, employeeId], (err, result) => {
+    db.query(sql, [roleId, employeeId], (err, result) => {
         if (err) return console.log({ error: err.message });
-        console.log(`Employee was successfully updated!`)
+        console.log(`Employee's role was successfully updated!`)
+    });
+}
+
+const updateEmployeeManager = (managerId, employeeId) => {
+    const sql = `UPDATE employees
+                 SET manager_id = ?
+                 WHERE id = ?`;
+
+    db.query(sql, [managerId, employeeId], (err, result) => {
+        if (err) return console.log({ error: err.message });
+        console.log(`Employee's manager was successfully updated!`)
+    });
+}
+
+const deleteDepartment = (departmentId) => {
+    const sql = `DELETE FROM departments WHERE id = ?`
+
+    db.query(sql, [departmentId], (err, result) => {
+        if (err) return console.log({ error: err.message });
+        console.log(`Department successfully deleted!`)
+    });
+}
+
+const deleteRole = (roleId) => {
+    const sql = `DELETE FROM roles WHERE id = ?`
+
+    db.query(sql, [roleId], (err, result) => {
+        if (err) return console.log({ error: err.message });
+        console.log(`Role successfully deleted!`)
+    });
+}
+
+const deleteEmployee = (employeeId) => {
+    const sql = `DELETE FROM employees WHERE id = ?`
+
+    db.query(sql, [employeeId], (err, result) => {
+        if (err) return console.log({ error: err.message });
+        console.log(`Employee successfully deleted!`)
     });
 }
 
 module.exports = {
     getEmployees,
+    getEmployeesByManager,
+    getEmployeesByDepartment,
     getRoles,
     getDepartments,
+    getBudgetUtilization,
     insertDepartment,
     insertRole,
     insertEmployee,
-    updateEmployee
+    updateEmployeeRole,
+    updateEmployeeManager,
+    deleteDepartment,
+    deleteRole,
+    deleteEmployee
 };
