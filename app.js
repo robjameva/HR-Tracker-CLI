@@ -1,37 +1,128 @@
+const inquirer = require('inquirer');
 const {
-    getEmployees,
-    getEmployeesByManager,
-    getEmployeesByDepartment,
-    getRoles,
-    getDepartments,
-    getBudgetUtilization,
-    insertDepartment,
-    insertRole,
-    insertEmployee,
-    updateEmployeeRole,
-    updateEmployeeManager,
-    deleteDepartment,
-    deleteRole,
-    deleteEmployee
-} = require('./utils/query');
+    initialQuestions,
+    viewQuestions,
+    addQuestions,
+    updateQuestions,
+    removeQuestions
+} = require('./utils/questions');
+// const handleResponse = require('./utils/utils');
+
+const startApp = () => inquirer.prompt(initialQuestions);
+const promptViewQuestions = () => inquirer.prompt(viewQuestions);
+const promptAddQuestions = () => inquirer.prompt(addQuestions);
+const promptUpdateQuestions = () => inquirer.prompt(updateQuestions);
+const promptRemoveQuestions = () => inquirer.prompt(removeQuestions);
+
+const handleViewResponse = response => {
+    switch (response) {
+        case 'View all departments':
+
+            break;
+        case 'View all roles':
+
+            break;
+        case 'View all employees':
+
+            break;
+        case 'View employees by manager':
+
+            break;
+        case 'View employees by department':
+
+            break;
+        case 'View budget utilization':
+
+            break;
+        case 'Back to main menu':
+            return startApp().then(response => handleResponse(response.startMenu))
+        case 'Quit':
+            console.log('Thank you for using HR Plus!')
+            break;
+    }
+}
+
+const handleAddResponse = response => {
+    switch (response) {
+        case 'Add a department':
+
+            break;
+        case 'Add a role':
+
+            break;
+        case 'Add an employee':
+
+            break;
+        case 'Back to main menu':
+            return startApp().then(response => handleResponse(response.startMenu))
+        case 'Quit':
+            console.log('Thank you for using HR Plus!')
+            break;
+    }
+}
+
+const handleUpdateResponse = response => {
+    switch (response) {
+        case 'Update an employee role':
+
+            break;
+        case 'Update an employees manager':
+
+            break;
+        case 'Back to main menu':
+            return startApp().then(response => handleResponse(response.startMenu))
+        case 'Quit':
+            console.log('Thank you for using HR Plus!')
+            break;
+    }
+}
+
+const handleDeleteResponse = response => {
+    switch (response) {
+        case 'Remove a department':
+
+            break;
+        case 'Remove a role':
+
+            break;
+        case 'Remove an employee':
+
+            break;
+        case 'Back to main menu':
+            return startApp().then(response => handleResponse(response.startMenu))
+        case 'Quit':
+            console.log('Thank you for using HR Plus!')
+            break;
+    }
+}
+
+const handleResponse = response => {
+    switch (response) {
+        case 'View Records':
+            promptViewQuestions()
+                .then(response => handleViewResponse(response.viewChoice));
+            break;
+        case 'Add Records':
+            promptAddQuestions()
+                .then(response => handleAddResponse(response.addChoice));
+            break;
+        case 'Update Records':
+            promptUpdateQuestions()
+                .then(response => handleUpdateResponse(response.updateChoice));
+            break;
+        case 'Delete Records':
+            promptRemoveQuestions()
+                .then(response => handleDeleteResponse(response.removeChoice));
+            break;
+        case 'Quit':
+            console.log('Thank you for using HR Plus!')
+            break;
+    }
+}
+
+startApp()
+    .then(response => handleResponse(response.startMenu));
 
 
 
-// insertEmployee('Robert', 'Evanik', 2, 10);
-// updateEmployeeRole(1, 101);
-// updateEmployeeManager(1, 101);
-// insertDepartment('testing 123');
-// insertRole('test role', 50000, 1);
-
-// deleteDepartment(7);
-// deleteRole(13);
-// deleteEmployee(101);
-
-// getEmployees();
-// getEmployeesByManager();
-// getEmployeesByDepartment();
-// getRoles();
-// getDepartments();
-
-
-// getBudgetUtilization();
+module.exports = startApp;

@@ -1,5 +1,24 @@
 const db = require('../db/connection')
 const cTable = require('console.table');
+const startApp = require('../app')
+
+const getDepartments = () => {
+    const sql = `SELECT id, name AS department
+                 FROM departments`;
+
+    // db.query(sql, (err, rows) => {
+    //     if (err) console.log({ error: err.message });
+    //     console.table(rows);
+    // });
+    db.promise().query(sql)
+        .then(([rows, fields]) => {
+            console.table(rows);
+        })
+        .catch(console.log)
+        .then(() => db.end())
+        .then(() => startApp())
+
+}
 
 const getEmployees = () => {
     const sql = `SELECT e.id, e.first_name, e.last_name, roles.title, departments.name AS department, CONCAT('$', FORMAT(roles.salary, 0)) AS 'salary', m.first_name AS Manager
@@ -46,16 +65,6 @@ const getRoles = () => {
     const sql = `SELECT roles.id, title, CONCAT('$', FORMAT(salary, 0)) AS 'salary', departments.name AS department
                  FROM roles
                  LEFT JOIN departments ON roles.department_id = departments.id`;
-
-    db.query(sql, (err, rows) => {
-        if (err) console.log({ error: err.message });
-        console.table(rows);
-    });
-}
-
-const getDepartments = () => {
-    const sql = `SELECT id, name AS department
-                 FROM departments`;
 
     db.query(sql, (err, rows) => {
         if (err) console.log({ error: err.message });
