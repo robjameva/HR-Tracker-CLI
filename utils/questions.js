@@ -1,3 +1,8 @@
+const getDeptIdAsync = require('../utils/utils')
+const inquirer = require('inquirer');
+const db = require('../db/connection');
+const { indexOf } = require('lodash');
+
 
 const initialQuestions = [
     {
@@ -86,10 +91,92 @@ const removeQuestions = [
     }
 ];
 
+const insertDepartmentArgs = [
+    {
+        type: 'input',
+        name: 'departmentName',
+        message: 'Please enter the department name:',
+        validate: departmentName => {
+            if (departmentName) {
+                return true;
+            } else {
+                console.log('Please enter the department name!');
+                return false;
+            }
+        }
+    }
+];
+
+const promptInsertrole = async () => {
+    const list = [];
+    const map = []
+
+    const sql = `SELECT id, name AS department
+        FROM departments`;
+
+    await db.promise().query(sql)
+        .then(([rows, fields]) => {
+            rows.forEach(row => {
+                list.push(row.department)
+                map.push(row)
+            })
+
+        })
+
+    const insertRoleArgs = [
+        {
+            type: 'input',
+            name: 'roleName',
+            message: 'Please enter the name of the new role:',
+            validate: roleName => {
+                if (roleName) {
+                    return true;
+                } else {
+                    console.log('Please enter the name of the new role!');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'roleSalary',
+            message: 'Please enter the salary of the new role:',
+            validate: roleSalary => {
+                if (roleSalary) {
+                    return true;
+                } else {
+                    console.log('Please enter the salary of the new role!');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'list',
+            name: 'departmentId',
+            message: 'What department does this role belong to?',
+            choices: list,
+            default: 0,
+            loop: false,
+            filter(answer) {
+                const depart = map.find(item => item.department === answer)
+                const index = map.indexOf(depart)
+                return map[index].id
+            }
+        }
+    ];
+    return inquirer.prompt(insertRoleArgs);
+}
+
+
+
+
+
 module.exports = {
     initialQuestions,
     viewQuestions,
     addQuestions,
+    insertDepartmentArgs,
     updateQuestions,
-    removeQuestions
+    removeQuestions,
+    promptInsertrole
 }

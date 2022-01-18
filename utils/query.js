@@ -1,23 +1,27 @@
 const db = require('../db/connection')
 const cTable = require('console.table');
-const startApp = require('../app')
 
 const getDepartments = () => {
     const sql = `SELECT id, name AS department
                  FROM departments`;
 
-    // db.query(sql, (err, rows) => {
-    //     if (err) console.log({ error: err.message });
-    //     console.table(rows);
-    // });
-    db.promise().query(sql)
-        .then(([rows, fields]) => {
-            console.table(rows);
-        })
-        .catch(console.log)
-        .then(() => db.end())
-        .then(() => startApp())
+    db.query(sql, (err, rows) => {
+        if (err) console.log({ error: err.message });
+        console.log('\n \n ')
+        console.table(rows);
+    });
+}
 
+const getRoles = () => {
+    const sql = `SELECT roles.id, title, CONCAT('$', FORMAT(salary, 0)) AS 'salary', departments.name AS department
+                 FROM roles
+                 LEFT JOIN departments ON roles.department_id = departments.id`;
+
+    db.query(sql, (err, rows) => {
+        if (err) console.log({ error: err.message });
+        console.log('\n \n ')
+        console.table(rows);
+    });
 }
 
 const getEmployees = () => {
@@ -29,6 +33,7 @@ const getEmployees = () => {
 
     db.query(sql, (err, rows) => {
         if (err) console.log({ error: err.message });
+        console.log('\n \n ')
         console.table(rows);
     });
 }
@@ -43,6 +48,7 @@ const getEmployeesByManager = () => {
 
     db.query(sql, (err, rows) => {
         if (err) console.log({ error: err.message });
+        console.log('\n \n ')
         console.table(rows);
     });
 }
@@ -57,17 +63,7 @@ const getEmployeesByDepartment = () => {
 
     db.query(sql, (err, rows) => {
         if (err) console.log({ error: err.message });
-        console.table(rows);
-    });
-}
-
-const getRoles = () => {
-    const sql = `SELECT roles.id, title, CONCAT('$', FORMAT(salary, 0)) AS 'salary', departments.name AS department
-                 FROM roles
-                 LEFT JOIN departments ON roles.department_id = departments.id`;
-
-    db.query(sql, (err, rows) => {
-        if (err) console.log({ error: err.message });
+        console.log('\n \n ')
         console.table(rows);
     });
 }
@@ -81,6 +77,7 @@ const getBudgetUtilization = () => {
 
     db.query(sql, (err, rows) => {
         if (err) console.log({ error: err.message });
+        console.log('\n \n ')
         console.table(rows);
     });
 }
@@ -91,6 +88,7 @@ const insertDepartment = departmentName => {
 
     db.query(sql, departmentName, (err, result) => {
         if (err) return console.log({ error: err.message });
+        console.log('\n \n ')
         console.log(`${departmentName} was successfully added to the tracker!`)
     });
 }
@@ -101,6 +99,7 @@ const insertRole = (roleName, salary, department) => {
 
     db.query(sql, [roleName, salary, department], (err, result) => {
         if (err) return console.log({ error: err.message });
+        console.log('\n \n ')
         console.log(`${roleName} was successfully added to the tracker!`)
     });
 }
@@ -111,6 +110,7 @@ const insertEmployee = (firstName, lastName, role, manager) => {
 
     db.query(sql, [firstName, lastName, role, manager], (err, result) => {
         if (err) return console.log({ error: err.message });
+        console.log('\n \n ')
         console.log(`${firstName} was successfully added to the tracker!`)
     });
 }
@@ -122,6 +122,7 @@ const updateEmployeeRole = (roleId, employeeId) => {
 
     db.query(sql, [roleId, employeeId], (err, result) => {
         if (err) return console.log({ error: err.message });
+        console.log('\n \n ')
         console.log(`Employee's role was successfully updated!`)
     });
 }
@@ -133,6 +134,7 @@ const updateEmployeeManager = (managerId, employeeId) => {
 
     db.query(sql, [managerId, employeeId], (err, result) => {
         if (err) return console.log({ error: err.message });
+        console.log('\n \n ')
         console.log(`Employee's manager was successfully updated!`)
     });
 }
@@ -142,6 +144,7 @@ const deleteDepartment = (departmentId) => {
 
     db.query(sql, [departmentId], (err, result) => {
         if (err) return console.log({ error: err.message });
+        console.log('\n \n ')
         console.log(`Department successfully deleted!`)
     });
 }
@@ -151,6 +154,7 @@ const deleteRole = (roleId) => {
 
     db.query(sql, [roleId], (err, result) => {
         if (err) return console.log({ error: err.message });
+        console.log('\n \n ')
         console.log(`Role successfully deleted!`)
     });
 }
@@ -160,6 +164,7 @@ const deleteEmployee = (employeeId) => {
 
     db.query(sql, [employeeId], (err, result) => {
         if (err) return console.log({ error: err.message });
+        console.log('\n \n ')
         console.log(`Employee successfully deleted!`)
     });
 }
