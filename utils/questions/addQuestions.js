@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const db = require('../../db/connection');
 
-const addQuestions = [
+const questions = [
     {
         type: 'list',
         name: 'addChoice',
@@ -183,7 +183,7 @@ const promptInsertEmployee = async () => {
 }
 
 
-const promptAddQuestions = () => inquirer.prompt(addQuestions);
+const promptAddQuestions = () => inquirer.prompt(questions);
 const promptInsertDepartment = () => inquirer.prompt(insertDepartmentArgs);
 
 module.exports = {

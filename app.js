@@ -3,23 +3,10 @@ const promptViewQuestions = require('./utils/questions/viewQuestions');
 const { promptAddQuestions, promptInsertDepartment, promptInsertRole, promptInsertEmployee } = require('./utils/questions/addQuestions');
 const { promptUpdateQuestions, promptUpdateRole, promptUpdateManager } = require('./utils/questions/updateQuestions');
 const { promptRemoveQuestions, promptDeleteDepartment, promptDeleteRole, promptDeleteEmployee } = require('./utils/questions/deleteQuestions');
-const {
-    getEmployees,
-    getEmployeesByManager,
-    getEmployeesByDepartment,
-    getRoles,
-    getDepartments,
-    getBudgetUtilization,
-    insertDepartment,
-    insertRole,
-    insertEmployee,
-    updateEmployeeRole,
-    updateEmployeeManager,
-    deleteDepartment,
-    deleteRole,
-    deleteEmployee
-} = require('./utils/queries/query');
-
+const { getEmployees, getEmployeesByManager, getEmployeesByDepartment, getRoles, getDepartments, getBudgetUtilization } = require('./utils/queries/viewQuery');
+const { insertDepartment, insertRole, insertEmployee } = require('./utils/queries/addQuery')
+const { updateEmployeeRole, updateEmployeeManager } = require('./utils/queries/updateQuery')
+const { deleteDepartment, deleteRole, deleteEmployee } = require('./utils/queries/deleteQuery')
 
 const handleViewResponse = response => {
     switch (response) {

@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 
 
-const viewQuestions = [
+const questions = [
     {
         type: 'list',
         name: 'viewChoice',
@@ -21,7 +21,7 @@ const viewQuestions = [
     }
 ];
 
-const promptViewQuestions = () => inquirer.prompt(viewQuestions);
+const promptViewQuestions = () => inquirer.prompt(questions);
 
 
 

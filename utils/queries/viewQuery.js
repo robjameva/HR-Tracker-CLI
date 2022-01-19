@@ -82,92 +82,7 @@ const getBudgetUtilization = () => {
     });
 }
 
-const insertDepartment = departmentName => {
-    const sql = `INSERT INTO departments (name)
-    VALUES (?)`;
 
-    db.query(sql, departmentName, (err, result) => {
-        if (err) return console.log({ error: err.message });
-        console.log('\n \n ')
-        console.log(`${departmentName} was successfully added to the tracker!`)
-    });
-}
-
-const insertRole = (roleName, salary, department) => {
-    const sql = `INSERT INTO roles (title, salary, department_id)
-    VALUES (?, ?, ?)`;
-
-    db.query(sql, [roleName, salary, department], (err, result) => {
-        if (err) return console.log({ error: err.message });
-        console.log('\n \n ')
-        console.log(`${roleName} was successfully added to the tracker!`)
-    });
-}
-
-const insertEmployee = (firstName, lastName, role, manager) => {
-    const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
-    VALUES (?, ?, ?, ?)`;
-
-    db.query(sql, [firstName, lastName, role, manager], (err, result) => {
-        if (err) return console.log({ error: err.message });
-        console.log('\n \n ')
-        console.log(`${firstName} was successfully added to the tracker!`)
-    });
-}
-
-const updateEmployeeRole = (roleId, employeeId) => {
-    const sql = `UPDATE employees
-                 SET role_id = ?
-                 WHERE id = ?`;
-
-    db.query(sql, [roleId, employeeId], (err, result) => {
-        if (err) return console.log({ error: err.message });
-        console.log('\n \n ')
-        console.log(`Employee's role was successfully updated!`)
-    });
-}
-
-const updateEmployeeManager = (managerId, employeeId) => {
-    const sql = `UPDATE employees
-                 SET manager_id = ?
-                 WHERE id = ?`;
-
-    db.query(sql, [managerId, employeeId], (err, result) => {
-        if (err) return console.log({ error: err.message });
-        console.log('\n \n ')
-        console.log(`Employee's manager was successfully updated!`)
-    });
-}
-
-const deleteDepartment = (departmentId) => {
-    const sql = `DELETE FROM departments WHERE id = ?`
-
-    db.query(sql, [departmentId], (err, result) => {
-        if (err) return console.log({ error: err.message });
-        console.log('\n \n ')
-        console.log(`Department successfully deleted!`)
-    });
-}
-
-const deleteRole = (roleId) => {
-    const sql = `DELETE FROM roles WHERE id = ?`
-
-    db.query(sql, [roleId], (err, result) => {
-        if (err) return console.log({ error: err.message });
-        console.log('\n \n ')
-        console.log(`Role successfully deleted!`)
-    });
-}
-
-const deleteEmployee = (employeeId) => {
-    const sql = `DELETE FROM employees WHERE id = ?`
-
-    db.query(sql, [employeeId], (err, result) => {
-        if (err) return console.log({ error: err.message });
-        console.log('\n \n ')
-        console.log(`Employee successfully deleted!`)
-    });
-}
 
 module.exports = {
     getEmployees,
@@ -175,13 +90,5 @@ module.exports = {
     getEmployeesByDepartment,
     getRoles,
     getDepartments,
-    getBudgetUtilization,
-    insertDepartment,
-    insertRole,
-    insertEmployee,
-    updateEmployeeRole,
-    updateEmployeeManager,
-    deleteDepartment,
-    deleteRole,
-    deleteEmployee
+    getBudgetUtilization
 };
