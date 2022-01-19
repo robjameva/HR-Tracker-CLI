@@ -25,7 +25,7 @@ const getRoles = () => {
 }
 
 const getEmployees = () => {
-    const sql = `SELECT e.id, e.first_name, e.last_name, roles.title, departments.name AS department, CONCAT('$', FORMAT(roles.salary, 0)) AS 'salary', m.first_name AS Manager
+    const sql = `SELECT e.id, e.first_name AS 'first name', e.last_name AS 'last name', roles.title, departments.name AS department, CONCAT('$', FORMAT(roles.salary, 0)) AS 'salary', m.first_name AS manager
                  FROM employees e
                  LEFT JOIN employees m ON e.manager_id = m.id
                  LEFT JOIN roles ON e.role_id = roles.id
