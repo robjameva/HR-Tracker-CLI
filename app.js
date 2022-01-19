@@ -1,13 +1,8 @@
-const inquirer = require('inquirer');
-const {
-    initialQuestions,
-    viewQuestions,
-    addQuestions,
-    insertDepartmentArgs,
-    updateQuestions,
-    removeQuestions,
-    promptInsertrole
-} = require('./utils/questions');
+const startApp = require('./utils/questions/initialQuestions');
+const promptViewQuestions = require('./utils/questions/viewQuestions');
+const { promptAddQuestions, promptInsertDepartment, promptInsertRole, promptInsertEmployee } = require('./utils/questions/addQuestions');
+const { promptUpdateQuestions, promptUpdateRole, promptUpdateManager } = require('./utils/questions/updateQuestions');
+const { promptRemoveQuestions, promptDeleteDepartment, promptDeleteRole, promptDeleteEmployee } = require('./utils/questions/deleteQuestions');
 const {
     getEmployees,
     getEmployeesByManager,
@@ -23,17 +18,8 @@ const {
     deleteDepartment,
     deleteRole,
     deleteEmployee
-} = require('./utils/query');
+} = require('./utils/queries/query');
 
-const startApp = () => inquirer.prompt(initialQuestions);
-const promptViewQuestions = () => inquirer.prompt(viewQuestions);
-// Insert Prompts
-const promptAddQuestions = () => inquirer.prompt(addQuestions);
-const promptInsertDepartment = () => inquirer.prompt(insertDepartmentArgs);
-
-
-const promptUpdateQuestions = () => inquirer.prompt(updateQuestions);
-const promptRemoveQuestions = () => inquirer.prompt(removeQuestions);
 
 const handleViewResponse = response => {
     switch (response) {
@@ -71,11 +57,12 @@ const handleAddResponse = async response => {
                 .then(response => insertDepartment(response.departmentName))
             break;
         case 'Add a role':
-            await promptInsertrole()
+            await promptInsertRole()
                 .then(response => insertRole(response.roleName, response.roleSalary, response.departmentId))
             break;
         case 'Add an employee':
-
+            await promptInsertEmployee()
+                .then(response => insertEmployee(response.firstName, response.lastName, response.roleId, response.managerId))
             break;
         case 'Back to main menu':
             break;
@@ -86,13 +73,15 @@ const handleAddResponse = async response => {
     return startApp().then(response => handleResponse(response.startMenu));
 }
 
-const handleUpdateResponse = response => {
+const handleUpdateResponse = async response => {
     switch (response) {
         case 'Update an employee role':
-
+            await promptUpdateRole()
+                .then(response => updateEmployeeRole(response.roleId, response.employeeId))
             break;
         case 'Update an employees manager':
-
+            await promptUpdateManager()
+                .then(response => updateEmployeeManager(response.managerId, response.employeeId))
             break;
         case 'Back to main menu':
             break;
@@ -103,16 +92,19 @@ const handleUpdateResponse = response => {
     return startApp().then(response => handleResponse(response.startMenu))
 }
 
-const handleDeleteResponse = response => {
+const handleDeleteResponse = async response => {
     switch (response) {
         case 'Remove a department':
-
+            await promptDeleteDepartment()
+                .then(response => deleteDepartment(response.departmentId))
             break;
         case 'Remove a role':
-
+            await promptDeleteRole()
+                .then(response => deleteRole(response.roleId))
             break;
         case 'Remove an employee':
-
+            await promptDeleteEmployee()
+                .then(response => deleteEmployee(response.employeeId))
             break;
         case 'Back to main menu':
             break;
